@@ -1,2 +1,2 @@
-# symplectic-geometry-toolkit
+# Symplectic Geometry Toolkit
 Symplectic Geometry Toolkit
