@@ -1,4 +1,4 @@
-function R = compute_R_2dof(t, x_vec, params)
+function R_mtx = compute_R_2dof(t, x_vec, params)
 %==========================================================================
 %
 % Computes the ortho-symplectic transformation matrix for a planar
@@ -71,7 +71,7 @@ function R = compute_R_2dof(t, x_vec, params)
 %
 % OUTPUTS:                  Description                          Units
 %
-%   R               - Ortho-symplectic transformation matrix    [-]
+%   R_mtx               - Ortho-symplectic transformation matrix    [-]
 %
 %==========================================================================
 
@@ -95,6 +95,9 @@ function R = compute_R_2dof(t, x_vec, params)
         case 'cr3bp'
             T_mtx = [eye(2), zeros(2);
                     [0,-1; 1, 0], eye(2)];
+        case 'hillr3bp'
+            T_mtx = [eye(2), zeros(2);
+                    [0,-1; 1, 0], eye(2)];   
         case '2bp'
             T_mtx = eye(4);
         otherwise
@@ -149,7 +152,7 @@ function R = compute_R_2dof(t, x_vec, params)
     v_2_hat = -J*u_2_hat;
 
     % ---------------------------------------------------------------------
-    % (v) Calculate R
+    % (v) Calculate R_mtx
     % ---------------------------------------------------------------------
-    R = [u_1_hat, u_2_hat, v_1_hat, v_2_hat];
+    R_mtx = [u_1_hat, u_2_hat, v_1_hat, v_2_hat];
 end
