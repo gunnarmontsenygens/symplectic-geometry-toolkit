@@ -1,0 +1,32 @@
+function [Phi_mtx_hist, evals_Phi_mtx_hist, norm_evals_Phi_mtx_hist, evecs_Phi_mtx_hist, Psi_tilde_mtx_hist, eval_Psi_tilde_mtx_hist, norm_eval_Psi_tilde_mtx_hist, evecs_Psi_tilde_mtx_hist, check_hist] = analyze_Phi_Psi_tilde_2dof(x0_vec, t_hist, params)
+
+    % Initialization
+    x0_vec = x0_vec(:);
+    n = length(x_0_vec);
+    N_t = length(t_hist);
+    integrate = params.fun.integrate;
+    
+    % State and STM integration
+    [~, x_vec_hist, Phi_mtx_hist, ~, ~, ~, ~] = integrate(t_hist, x0_vec, params);
+    xf_vec = x_vec_hist(end, :);
+
+    % Preallocation
+    eig_Phi_mtx_hist = zeros(N_t, 4);
+    norm_eig_Phi_mtx_hist = zeros(N_t, 4);
+
+    % STM Loop
+    for i = 1 : N_t
+        
+        % Extract planar Phi
+        Phi_mtx = squeeze(Phi_mtx_hist(N_t, :, :));
+        idx = [1, 2, 4, 5];
+        Phi_planar_mtx = Phi_mtx(idx, idx);
+
+        % Calculate eigenvalues and eigenvectors of planar Phi
+        [V,D] 
+
+
+    end
+
+
+end
