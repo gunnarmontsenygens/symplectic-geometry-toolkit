@@ -1,4 +1,4 @@
-function check = check_Psi_tilde_2dof(Psi_tilde_mtx)
+function check = check_Psi_tilde_2dof(Psi_tilde_mtx, display)
 %==========================================================================
 %
 % Checks the structural and symplectic properties of the transformed State
@@ -63,6 +63,12 @@ function check = check_Psi_tilde_2dof(Psi_tilde_mtx)
 %
 %
 %==========================================================================
+    
+    % If only one input is provided
+    if nargin < 2
+        display = true;
+    end
+    
 
     % Extract the parameters
     sigma_vec = [Psi_tilde_mtx(1,2); Psi_tilde_mtx(1,3); Psi_tilde_mtx(1,4)];
@@ -73,10 +79,10 @@ function check = check_Psi_tilde_2dof(Psi_tilde_mtx)
     M_mtx = Psi_tilde_mtx(3:4, 3:4);
 
     % Lambda * lambda ^-1
-    lambda_inv_check = lambda_vec(1) * lambda_vec(2);
+    lambda_inv_check = lambda_vec(1) * lambda_vec(2)-1;
 
     % detM
-    detM = det(M_mtx);
+    detM = det(M_mtx)-1;
 
     % Symplectic error using the frobenius norm
     J_mtx = [ 0,  1,  0,  0;
@@ -95,7 +101,7 @@ function check = check_Psi_tilde_2dof(Psi_tilde_mtx)
     % Checking the relationship between sigma_vec and gamma_vec
     J_2_mtx = [0, 1;
             -1, 0];
-    sigmagamma_err_vec = gamma_vec(1:2) - M_mtx * J_2_mtx * sigma_vec(2:3);
+    sigmagamma_err_vec = gamma_vec(1:2) - Psi_tilde_mtx(2,2)*M_mtx * J_2_mtx * sigma_vec(2:3);
     sigmagamma_err = norm(sigmagamma_err_vec);
 
     % Incorporating all the values into the struct 
@@ -110,28 +116,30 @@ function check = check_Psi_tilde_2dof(Psi_tilde_mtx)
     check.sigmagamma_err = sigmagamma_err;
 
     % Display checks
-    disp(' ')
-    disp('================ Psi Tilde Check ================')
-    
-    fprintf('sigma_vec = \n')
-    fprintf('    %.15g\n', check.sigma_vec)
-    
-    fprintf('\ngamma_vec = \n')
-    fprintf('    %.15g\n', check.gamma_vec)
-    
-    fprintf('\nlambda_vec = \n')
-    fprintf('    %.15g\n', check.lambda_vec)
-    
-    fprintf('\nlambda_inv_check = %.15g\n', check.lambda_inv_check)
-    fprintf('detM             = %.15g\n', check.detM)
-    fprintf('sympl_err        = %.15g\n', check.sympl_err)
-    fprintf('zeroterms_err    = %.15g\n', check.zeroterms_err)
-    
-    fprintf('\nsigmagamma_err_vec = \n')
-    fprintf('    %.15g\n', check.sigmagamma_err_vec)
-    
-    fprintf('\nsigmagamma_err   = %.15g\n', check.sigmagamma_err)
-    
-    disp('=================================================')
+    if display
+        disp(' ')
+        disp('================ Psi Tilde Check ================')
+        
+        fprintf('sigma_vec = \n')
+        fprintf('    %.15g\n', check.sigma_vec)
+        
+        fprintf('\ngamma_vec = \n')
+        fprintf('    %.15g\n', check.gamma_vec)
+        
+        fprintf('\nlambda_vec = \n')
+        fprintf('    %.15g\n', check.lambda_vec)
+        
+        fprintf('\nlambda_inv_check = %.15g\n', check.lambda_inv_check)
+        fprintf('detM             = %.15g\n', check.detM)
+        fprintf('sympl_err        = %.15g\n', check.sympl_err)
+        fprintf('zeroterms_err    = %.15g\n', check.zeroterms_err)
+        
+        fprintf('\nsigmagamma_err_vec = \n')
+        fprintf('    %.15g\n', check.sigmagamma_err_vec)
+        
+        fprintf('\nsigmagamma_err   = %.15g\n', check.sigmagamma_err)
+        
+        disp('=================================================')
+    end
 
 end

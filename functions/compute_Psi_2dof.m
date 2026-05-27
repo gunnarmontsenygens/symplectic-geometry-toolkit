@@ -79,7 +79,6 @@ function Psi_mtx = compute_Psi_2dof(t0, tf, x0_vec, xf_vec, Phi_mtx, params)
     % ---------------------------------------------------------------------
 
     % Transformation matrix: [x y vx vy] -> [x y px py]
-    lower(params.model.name)
     switch lower(params.model.name)
         case 'cr3bp'
             T_mtx = [eye(2), zeros(2);
