@@ -70,7 +70,12 @@ function Psi_mtx = compute_Psi_2dof(t0, tf, x0_vec, xf_vec, Phi_mtx, params)
     %              EXTRACT PLANAR STM
     % ---------------------------------------------------------------------
 
-    idx = [1, 2, 4, 5];
+    switch lower(params.model.name)
+        case 'pccr4bp'
+            idx = [1,2,3,4];
+        otherwise
+            idx = [1, 2, 4, 5];
+    end
 
     Phi_planar_mtx = Phi_mtx(idx, idx);
 
@@ -85,7 +90,10 @@ function Psi_mtx = compute_Psi_2dof(t0, tf, x0_vec, xf_vec, Phi_mtx, params)
                     [0,-1; 1, 0], eye(2)];
         case 'hillr3bp'
             T_mtx = [eye(2), zeros(2);
-                    [0,-1; 1, 0], eye(2)];            
+                    [0,-1; 1, 0], eye(2)];        
+        case 'pccr4bp'
+            T_mtx = [eye(2), zeros(2);
+                    [0,-1; 1, 0], eye(2)];       
         case '2bp'
             T_mtx = eye(4);
         otherwise

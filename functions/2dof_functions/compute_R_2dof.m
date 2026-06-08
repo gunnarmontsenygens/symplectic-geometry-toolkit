@@ -83,7 +83,13 @@ function R_mtx = compute_R_2dof(t, x_vec, params)
     dx_dt_vec = params.fun.eom(t, x_vec, params);
 
     % 2 DoF case
-    idx = [1, 2, 4, 5];
+    switch lower(params.model.name)
+        case 'pccr4bp'
+            idx = [1,2,3,4];
+        otherwise
+            idx = [1, 2, 4, 5];
+    end
+
     dx_dt_vec = dx_dt_vec(idx);
 
     % ---------------------------------------------------------------------
@@ -95,6 +101,10 @@ function R_mtx = compute_R_2dof(t, x_vec, params)
         case 'cr3bp'
             T_mtx = [eye(2), zeros(2);
                     [0,-1; 1, 0], eye(2)];
+
+        case 'pccr4bp'
+            T_mtx = [eye(2), zeros(2);
+                    [0,-1; 1, 0], eye(2)]; 
         case 'hillr3bp'
             T_mtx = [eye(2), zeros(2);
                     [0,-1; 1, 0], eye(2)];   

@@ -1,4 +1,4 @@
-function [Phi_hist, PhiTPhi_hist, Psi_tilde_hist, Psi_tildeTPsi_tilde_hist, check_hist] = analyze_Phi_Psi_tilde_2dof(x0_vec, t_hist, params)
+function [Phi_hist, PhiTPhi_hist, PhiPhiT_hist, Psi_tilde_hist, Psi_tildeTPsi_tilde_hist, Psi_tildePsi_tildeT_hist,  check_hist] = analyze_Phi_Psi_tilde_2dof(x0_vec, t_hist, params)
 %==========================================================================
 %
 % Computes the time evolution of the State Transition Matrix (STM),
@@ -56,6 +56,12 @@ function [Phi_hist, PhiTPhi_hist, Psi_tilde_hist, Psi_tildeTPsi_tilde_hist, chec
 %       .norm_evals     - Phi^T Phi eigenvalue norms            [-]
 %       .evecs          - Phi^T Phi eigenvector history         [-]
 %
+%   PhiPhiT_hist:
+%       .mtx            - Phi Phi^T history                     [-]
+%       .evals          - Phi Phi^T eigenvalue history          [-]
+%       .norm_evals     - Phi Phi^T eigenvalue norms            [-]
+%       .evecs          - Phi Phi^T eigenvector history         [-]
+%
 %   Psi_tilde_hist:
 %       .mtx            - Transformed STM history               [-]
 %       .evals          - Transformed STM eigenvalue history    [-]
@@ -67,6 +73,12 @@ function [Phi_hist, PhiTPhi_hist, Psi_tilde_hist, Psi_tildeTPsi_tilde_hist, chec
 %       .evals          - Psi_tilde^T Psi_tilde eigenvalues     [-]
 %       .norm_evals     - Psi_tilde^T Psi_tilde eigenvalue norms[-]
 %       .evecs          - Psi_tilde^T Psi_tilde eigenvectors    [-]
+%
+%   Psi_tildePsi_tildeT_hist:
+%       .mtx            - Psi_tilde Psi_tilde^T history         [-]
+%       .evals          - Psi_tilde Psi_tilde^T eigenvalues     [-]
+%       .norm_evals     - Psi_tilde Psi_tilde^T eigenvalue norms[-]
+%       .evecs          - Psi_tilde Psi_tilde^T eigenvectors    [-]
 %
 %   check_hist:
 %       .sigma_vec              - Sigma vector history          [-]
@@ -120,6 +132,13 @@ function [Phi_hist, PhiTPhi_hist, Psi_tilde_hist, Psi_tildeTPsi_tilde_hist, chec
         'norm_evals', zeros(N_t, 4), ...
         'evecs', zeros(N_t, 4, 4));
 
+    %PhiPhiT Preallocation
+    PhiPhiT_hist = struct(...
+        'mtx', zeros(N_t, 4, 4), ...
+        'evals', zeros(N_t, 4), ...
+        'norm_evals', zeros(N_t, 4), ...
+        'evecs', zeros(N_t, 4, 4));
+
     % Psi tilde Preallocation
     Psi_tilde_hist = struct(...
         'mtx', zeros(N_t, 4, 4), ...
@@ -129,6 +148,13 @@ function [Phi_hist, PhiTPhi_hist, Psi_tilde_hist, Psi_tildeTPsi_tilde_hist, chec
 
     %PsiTildeTPsiTilde Preallocation
     Psi_tildeTPsi_tilde_hist = struct(...
+        'mtx', zeros(N_t, 4, 4), ...
+        'evals', zeros(N_t, 4), ...
+        'norm_evals', zeros(N_t, 4), ...
+        'evecs', zeros(N_t, 4, 4));
+
+    %PsiTildePsiTildeT Preallocation
+    Psi_tildePsi_tildeT_hist = struct(...
         'mtx', zeros(N_t, 4, 4), ...
         'evals', zeros(N_t, 4), ...
         'norm_evals', zeros(N_t, 4), ...
@@ -210,6 +236,20 @@ function [Phi_hist, PhiTPhi_hist, Psi_tilde_hist, Psi_tildeTPsi_tilde_hist, chec
         PhiTPhi_hist.norm_evals(i, :) = [norm(D(1,1)), norm(D(2,2)), norm(D(3,3)), norm(D(4,4))];
         PhiTPhi_hist.evecs(i, :, :) = V;
 
+        % PHI PHI^T -------------------------------------------------------------
+        
+        % Compute Phi Phi^T
+        PhiPhiT_mtx = Phi_ham_mtx * Phi_ham_mtx';
+
+        % Calculate eigenvalues and eigenvectors of planar Phi ^T Phi
+        [V,D] = eig(PhiPhiT_mtx);
+        
+        % Store info in the respective arrays
+        PhiPhiT_hist.mtx(i, :, :) = PhiPhiT_mtx;
+        PhiPhiT_hist.evals(i, :) = [D(1,1), D(2,2), D(3,3), D(4,4)];
+        PhiPhiT_hist.norm_evals(i, :) = [norm(D(1,1)), norm(D(2,2)), norm(D(3,3)), norm(D(4,4))];
+        PhiPhiT_hist.evecs(i, :, :) = V;
+
         % PSI TILDE -------------------------------------------------------
 
         % Compute Psi_tilde matrix at t_hist(i)
@@ -227,6 +267,20 @@ function [Phi_hist, PhiTPhi_hist, Psi_tilde_hist, Psi_tildeTPsi_tilde_hist, chec
         Psi_tilde_hist.evals(i, :) = [D(1,1), D(2,2), D(3,3), D(4,4)];
         Psi_tilde_hist.norm_evals(i, :) = [norm(D(1,1)), norm(D(2,2)), norm(D(3,3)), norm(D(4,4))];
         Psi_tilde_hist.evecs(i, :, :) = V;
+
+        % PSI TILDE PSI TILDE ^T -------------------------------------------------------
+
+        % Compute 
+        Psi_tildePsi_tildeT_mtx = Psi_tilde_mtx * Psi_tilde_mtx';
+
+        % Calculate eigenvalues and eigenvectors
+        [V,D] = eig(Psi_tildePsi_tildeT_mtx);        
+
+        % Store info in the respective arrays
+        Psi_tildePsi_tildeT_hist.mtx(i, :, :) = Psi_tildePsi_tildeT_mtx;
+        Psi_tildePsi_tildeT_hist.evals(i, :) = [D(1,1), D(2,2), D(3,3), D(4,4)];
+        Psi_tildePsi_tildeT_hist.norm_evals(i, :) = [norm(D(1,1)), norm(D(2,2)), norm(D(3,3)), norm(D(4,4))];
+        Psi_tildePsi_tildeT_hist.evecs(i, :, :) = V;
 
         % PSI TILDE ^T PSI TILDE -------------------------------------------------------
 
