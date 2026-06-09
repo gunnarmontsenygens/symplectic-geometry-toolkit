@@ -100,7 +100,10 @@ function Psi_mtx = compute_Psi_3dof(t0, tf, x0_vec, xf_vec, Phi_mtx, params)
                     [0,-1, 0; 1, 0, 0; 0, 0, 0], eye(3)];
         case 'hillr3bp'
             T_mtx = [eye(3), zeros(3);
-                    [0,-1, 0; 1, 0, 0; 0, 0, 0], eye(3)];   
+                    [0,-1, 0; 1, 0, 0; 0, 0, 0], eye(3)];  
+        case 'apccr4bp'
+            T_mtx = [eye(3), zeros(3);
+                    [0,-1, 0; 1, 0, 0; 0, 0, 0], eye(3)]; 
         case '2bp'
             T_mtx = eye(6);
         otherwise

@@ -91,7 +91,10 @@ function R_mtx = compute_R_3dof(t, x_vec, params)
                     [0,-1, 0; 1, 0, 0; 0, 0, 0], eye(3)];
         case 'hillr3bp'
             T_mtx = [eye(3), zeros(3);
-                    [0,-1, 0; 1, 0, 0; 0, 0, 0], eye(3)];   
+                    [0,-1, 0; 1, 0, 0; 0, 0, 0], eye(3)];  
+        case 'apccr4bp'
+            T_mtx = [eye(3), zeros(3);
+                    [0,-1, 0; 1, 0, 0; 0, 0, 0], eye(3)];  
         case '2bp'
             T_mtx = eye(6);
         otherwise
