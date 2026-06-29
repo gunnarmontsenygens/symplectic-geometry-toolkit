@@ -104,11 +104,11 @@ function Psi_mtx = compute_Psi_2dof(t0, tf, x0_vec, xf_vec, Phi_mtx, params)
 
         case 'hamiltonian'
 
-            Phi_ham_mtx = Phi_planar_mtx; 
+            Phi_ham_mtx = Phi_planar_mtx
 
         case 'lagrangian'
 
-            Phi_ham_mtx = T_mtx * Phi_planar_mtx / T_mtx; 
+            Phi_ham_mtx = T_mtx * Phi_planar_mtx / T_mtx
 
         otherwise
 
