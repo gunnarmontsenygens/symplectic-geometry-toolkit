@@ -1,5 +1,4 @@
 function Psi_mtx = compute_Psi_2dof(t0, tf, x0_vec, xf_vec, Phi_mtx, params)
-
 %==========================================================================
 %
 % Computes the transformed State Transition Matrix (STM):
